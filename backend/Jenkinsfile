@@ -1,20 +1,24 @@
 pipeline {
-    agent any // Le dice a Jenkins que puede usar cualquier 'agente' o máquina disponible
+    agent any
+
+    // --- AÑADE ESTA SECCIÓN ---
+    options {
+        // Limpia el workspace antes de que el código sea descargado
+        cleanWs()
+    }
+    // -------------------------
 
     stages {
-        stage('Checkout') { // Etapa para descargar el código
+        stage('Checkout') {
             steps {
-                // Este comando clona tu repositorio en el espacio de trabajo de Jenkins
                 checkout scm
                 echo 'Código descargado.'
             }
         }
-        stage('Build Backend Image') { // Etapa para construir la imagen
+        stage('Build Backend Image') {
             steps {
-                // Nos movemos al directorio 'backend' antes de ejecutar comandos
                 dir('backend') {
                     echo 'Construyendo la imagen Docker del backend...'
-                    // Ejecuta el comando de construcción de Docker
                     sh 'docker build -t athena-bank-backend:latest .'
                 }
             }
